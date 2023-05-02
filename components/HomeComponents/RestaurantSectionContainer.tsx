@@ -3,13 +3,14 @@ import styled from "styled-components";
 import CardContainer from "./CardContainer";
 import Header from "./Header";
 import SearchBar from "./SearchBar";
-import HeaderBackground from "../../assets/bbqImage.png";
 import useRestaurants from "../../hooks/useRestaurants";
 import { Text } from "react-native";
 import useSetBusiness from "../../hooks/useSetBusiness";
 import { useAppSelector } from "../../store/Features/hook";
-import { getTotalRestaurants } from "../../store/HomePageSlices/useBusinessSlice";
+import { getTotalRestaurants, Restaurants } from "../../store/HomePageSlices/useBusinessSlice";
 import RemainingRestaurants from "./RemainingRestaurants";
+import { ListRenderItem } from "react-native";
+import { ListRenderItemInfo } from "react-native";
 
 const SectionList = styled.FlatList``;
 const HeaderContainer = styled.View`
@@ -31,13 +32,19 @@ const ContentListContainer = styled.View`
 	flex: 2;
 `;
 
-const RestaurantSectionContainer = (props) => {
+interface IRestaurantDetailProps {
+	categorySection: string[]
+}
+
+const RestaurantSectionContainer = (props:IRestaurantDetailProps) => {
+	const HeaderBackground = require("../../assets/bbqImage.png");
 	const { isDone } = useRestaurants();
 	const { categorySection } = props;
 	const totalBusiness = useAppSelector(getTotalRestaurants);
 
 	if (isDone) {
 		return (
+			<>
 			<ContentListContainer>
 				<SectionList
 					ListHeaderComponent={
@@ -60,21 +67,21 @@ const RestaurantSectionContainer = (props) => {
 					}
 					showsVerticalScrollIndicator={false}
 					data={categorySection}
-					renderItem={({ item }) => (
+					renderItem={({ item }: ListRenderItemInfo<string>)=> (
 						<>
 							<CardContainer
-								businesses={totalBusiness}
 								section={item}
 							/>
 						</>
 					)}
 				/>
 			</ContentListContainer>
+			</>
 		);
 	} else {
-		<>
+		return(<>
 			<Text>Loading Items...</Text>
-		</>;
+		</>);
 	}
 };
 export default RestaurantSectionContainer;

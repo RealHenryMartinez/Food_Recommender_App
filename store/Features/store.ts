@@ -14,3 +14,10 @@ export const store = configureStore({
   },
   devTools: true,
 })
+
+// Export some helper types used to improve type-checking
+/**
+ * typeof: Returns the type of the action object passed being the dispatch and selector
+ */
+export type AppDispatch = typeof store.dispatch;  // function type
+export type RootState = ReturnType<typeof store.getState>;

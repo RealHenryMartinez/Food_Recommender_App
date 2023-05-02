@@ -1,16 +1,15 @@
-import { getCategories, getRestaurants, getTotalRestaurants } from '../store/HomePageSlices/useBusinessSlice'
-import { useAppDispatch, useAppSelector } from '../store/Features/hook'
+import { getRestaurants} from '../store/HomePageSlices/useBusinessSlice'
+import { useAppDispatch } from '../store/Features/hook'
 import { useState, useEffect } from 'react'
-
 export default function useRestaurants() {
-  const [isDone, setIsDone] = useState(false)
+  const [isDone, setIsDone] = useState<boolean>(false)
   const dispatch = useAppDispatch()
   
   async function getRestaurantsAsync (){
     try {
       // getting all the restaurants from the database
      
-      await dispatch(getRestaurants())
+      //await dispatch(getRestaurants())
       //dispatch(getCategories());
       
     } catch (err) {
