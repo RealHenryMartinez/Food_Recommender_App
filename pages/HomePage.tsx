@@ -1,8 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import RemainingRestaurants from "../components/HomeComponents/RemainingRestaurants";
 import RestaurantSectionContainer from "../components/HomeComponents/RestaurantSectionContainer";
-import useRestaurants from "../hooks/useRestaurants";
 
 const MainContainer = styled.View`
 	background-color: #fff;
@@ -15,13 +13,15 @@ const ContentContainer = styled.View`
 const HomePage = () => {
 	const sectionCategory = ["Bars", "Seafood"];
 	return (
-		<MainContainer>
-			
-			<ContentContainer>
-				<RestaurantSectionContainer categorySection={sectionCategory}/>
-			</ContentContainer>
-			
-		</MainContainer>
+		<>
+			<MainContainer>
+				<ContentContainer>
+					<RestaurantSectionContainer
+						categorySection={sectionCategory}
+					/>
+				</ContentContainer>
+			</MainContainer>
+		</>
 	);
 };
 

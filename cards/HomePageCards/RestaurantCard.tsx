@@ -28,7 +28,16 @@ const CardRating = styled.Text``;
 const RatingContainer = styled.View`
 	flex-direction: row;
 `;
-const RestaurantCard = (props) => {
+interface IRestaurantDetails {
+	name: string;
+	image_url: string;
+	rating: number;
+}
+interface IRestaurant {
+	restaurantInfo: IRestaurantDetails;
+}
+
+const RestaurantCard = (props:IRestaurant) => {
 	const { restaurantInfo } = props;
 	return (
 		<>
