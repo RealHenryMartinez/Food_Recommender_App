@@ -3,6 +3,7 @@
  */
 
 import { configureStore, ThunkAction, Action} from '@reduxjs/toolkit'
+import useAuthSlice from '../AuthSlices/useAuthSlice';
 import useBusinessSlice from '../HomePageSlices/useBusinessSlice'
 
 export const store = configureStore({
@@ -10,7 +11,8 @@ export const store = configureStore({
   // event listener that handles events based on the received action type
   reducer: {
     // copy the original state and assign changes to the copied values we chooose
-    useBusinessSlice: useBusinessSlice
+    useBusinessSlice: useBusinessSlice,
+    useAuthSlice: useAuthSlice
   },
   devTools: true,
 })

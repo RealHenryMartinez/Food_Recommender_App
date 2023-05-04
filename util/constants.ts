@@ -10,3 +10,13 @@ export const YELP_URI: string = MAIN_URI + `/restaurant`;
 export const GET_REQUEST_URI: string = "/getRestaurants";
 
 export const GET_CATEGORY_URI: string = "/getCategories";
+
+export const GET_USER_URI: string = USER_URI + "/"
+
+/**
+ * email: payload.email,
+        password: payload.password,
+        firstName: payload.firstName,
+        lastName: payload.lastName,
+        profileImage: filePayload,
+ */
