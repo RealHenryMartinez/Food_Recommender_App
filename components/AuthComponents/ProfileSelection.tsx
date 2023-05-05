@@ -16,10 +16,10 @@ const ImagePreview = styled.Image`
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
-	border-width: 3px;
-	border-radius: 50px;
+	border-width: 5px;
+	border-radius: 200px;
 	background-color: #fffaeb;
-	border-color: #615a47;
+	border-color: #ff4049;
 	position: relative;
 `;
 const ImageFilter = styled.Image`
@@ -32,7 +32,8 @@ const ImageFilter = styled.Image`
 
 const ImageContainer = styled.View`
 	align-items: center;
-    flex: 0.30;
+    flex: 5;
+	height: 200px;
 `;
 
 export default function ProfileSelection() {

@@ -8,7 +8,7 @@ const HeaderText = styled.Text`
 const HeaderContainer = styled.View`
 
   margin-left: 5%;
-  margin-bottom: 5%;
+  margin-bottom: 10%;
 `;
 
 type IHeader = { header: string };

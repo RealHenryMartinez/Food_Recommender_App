@@ -44,7 +44,6 @@ export default function CardContainer({ section }: ICategory) {
 		let filteredBusiness;
 		filteredBusiness = restaurantItem.filter((restaurant) => {
 			for (let i = 0; i < restaurant["categories"].length; i++) {
-				console.log(restaurant["categories"][i].title);
 				if (restaurant["categories"][i].title === section) {
 					return restaurant["categories"][i].title === section;
 				}

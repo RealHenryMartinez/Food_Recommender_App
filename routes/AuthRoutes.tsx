@@ -1,6 +1,6 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import React, { useState } from "react";
+import React from "react";
 import LogInPage from "../pages/LogInPage";
 import SignUpPage from "../pages/SignUpPage";
 
@@ -13,10 +13,12 @@ export default function AuthRoutes() {
 				<Stack.Navigator
 					screenOptions={{
 						headerShown: false,
+						gestureEnabled: false
 					}}
 				>
-					<Stack.Screen name="Register" component={SignUpPage} />
+					
 					<Stack.Screen name="Login" component={LogInPage} />
+					<Stack.Screen name="Register" component={SignUpPage} />
 				</Stack.Navigator>
 			</NavigationContainer>
 		</>

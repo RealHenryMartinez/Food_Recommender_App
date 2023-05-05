@@ -1,8 +1,7 @@
 import React from "react";
-import AuthHeader from "../components/AuthComponents/AuthHeader";
-import ProfileSelection from "../components/AuthComponents/ProfileSelection";
 import { StatusBar } from "react-native";
 import styled from "styled-components";
+import SignUpForm from "../components/AuthComponents/SignUpForm";
 
 const headerImage: string = require("../assets/peopleEatingHeader.png");
 
@@ -12,8 +11,8 @@ const PageContainer = styled.View`
 	border-radius: 20px;
 	flex: 1;
 	padding-top: 5%;
-    margin-top: -5%;
-    shadow-color: #171717;
+	margin-top: -5%;
+	shadow-color: #171717;
 	shadow-offset: 0px -10px;
 	shadow-opacity: 0.5;
 	shadow-radius: 15px;
@@ -28,17 +27,16 @@ const HeaderImage = styled.Image`
 const MainContainer = styled.View`
 	flex: 1;
 `;
-
 export default function SignUpPage() {
 	return (
 		<MainContainer>
 			<HeaderContainer>
 				<HeaderImage source={headerImage} />
 			</HeaderContainer>
-			<PageContainer>
-				<AuthHeader header="Sign Up Now" />
-				<ProfileSelection />
 
+			<PageContainer>
+				<SignUpForm />
+				
 				<StatusBar
 					animated={true}
 					backgroundColor="#61dafb"
@@ -46,7 +44,10 @@ export default function SignUpPage() {
 					showHideTransition={"fade"}
 					hidden={false}
 				/>
+				
 			</PageContainer>
+
+
 		</MainContainer>
 	);
 }

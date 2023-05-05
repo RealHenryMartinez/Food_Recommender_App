@@ -10,6 +10,9 @@ export interface IUserCredentials {
 export interface IUserInfo extends IUserCredentials {
 	firstName: string;
 	lastName: string;
+	
+}
+export interface IUserState extends IUserInfo {
 	profileImage: object;
 	loggedIn: boolean;
 }
@@ -39,7 +42,7 @@ export let userParams: IUserCredentials = {
 // our request object
 export const getUser = handleGetAsyncThunk("getUser", userParams);
 
-const initialState: IUserInfo = {
+const initialState: IUserState = {
 	firstName: "",
 	lastName: "",
 	profileImage: {},
