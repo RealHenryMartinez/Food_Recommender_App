@@ -6,8 +6,11 @@ import HandleRoutes from './routes/HandleRoutes';
 
 export default function App() {
   return (
+    <>
     <Provider store={store}>
       <HandleRoutes />
     </Provider>
+    </>
+    
   );
 }

@@ -49,7 +49,7 @@ const NavButtonText = styled.Text`
 
 export default function LoginForm() {
   const { navigateTo } = useRoutes();
-  const { userLoginForm, setUserLoginForm} = useAuth();
+  const { userLoginForm, setUserLoginForm, signUserIn} = useAuth();
   const logInUser = setUserLoginForm as Dispatch<SetStateAction<IDispatchForm>>;
 	// Containing all the input's placeholder values besides the value itself
 	const placeholders: string[] = [
@@ -72,7 +72,9 @@ export default function LoginForm() {
 				ListFooterComponent={
 					<>
 						<LoginContainer>
-							<LoginButton>
+							<LoginButton
+								onPress={signUserIn}
+							>
 								<LoginView>
 									<LoginButtonText>Login</LoginButtonText>
 								</LoginView>
@@ -89,8 +91,6 @@ export default function LoginForm() {
 				}
 				data={Object.keys(userLoginForm)}
 				renderItem={({ item, index }) => {
-					console.log(userLoginForm[item]);
-
 					return (
 						<InputContainer key={index}>
 							<TextInputComponent

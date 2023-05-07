@@ -13,10 +13,4 @@ export const GET_CATEGORY_URI: string = "/getCategories";
 
 export const GET_USER_URI: string = USER_URI + "/"
 
-/**
- * email: payload.email,
-        password: payload.password,
-        firstName: payload.firstName,
-        lastName: payload.lastName,
-        profileImage: filePayload,
- */
+export const CREATE_USER_ENDPOINT: string = "/signup";

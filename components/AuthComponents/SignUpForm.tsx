@@ -2,7 +2,7 @@ import React, { Dispatch, SetStateAction } from "react";
 import styled from "styled-components";
 import useAuth from "../../hooks/useAuth";
 import TextInputComponent from "./TextInputComponent";
-import ProfileSelection from "../AuthComponents/ProfileSelection";
+
 import AuthHeader from "./AuthHeader";
 import { KeyboardAvoidingView, Platform } from "react-native";
 import useRoutes from "../../hooks/useRoutes";
@@ -43,8 +43,8 @@ const NavButtonText = styled.Text`
 const SignUpForm = () => {
 	const { navigateTo } = useRoutes();
 	// Used to set the state of our object properties of the user
-	const { userInfoForm, setUserInfoForm } = useAuth();
-	const createUser = setUserInfoForm as Dispatch<SetStateAction<IDispatchForm>>;
+	const { userInfoForm, setUserInfoForm, createUser, goToPhoto } = useAuth();
+	const setUser = setUserInfoForm as Dispatch<SetStateAction<IDispatchForm>>;
 	// Containing all the input's placeholder values besides the value itself
 	const placeholders: string[] = [
 		"John",
@@ -52,6 +52,14 @@ const SignUpForm = () => {
 		"user0000@gmail.com",
 		"Use more than 6 letters",
 	];
+	const signUpAndNavigate = () => {
+		console.log('navigate to photo')
+		createUser();
+		if(goToPhoto){
+			navigateTo("ChooseProfile");
+		}
+	}
+	
 	// Helps us with getting the keyboard to the right position when the user input is clicked
 	const keyboardVerticalOffset = Platform.OS === "ios" ? 175 : 0;
 	return (
@@ -63,13 +71,13 @@ const SignUpForm = () => {
 				ListHeaderComponent={
 					<>
 						<AuthHeader header="Sign Up Now" />
-						<ProfileSelection />
+						
 					</>
 				}
 				ListFooterComponent={
 					<>
 						<SignUpContainer>
-							<SignUpButton>
+							<SignUpButton onPress={signUpAndNavigate}>
 								<SignUpView>
 									<SignUpButtonText>Sign Up</SignUpButtonText>
 								</SignUpView>
@@ -92,7 +100,7 @@ const SignUpForm = () => {
 						<InputContainer key={index}>
 							<TextInputComponent
 								placeholder={placeholders[index]}
-								setUser={createUser}
+								setUser={setUser}
 								user={userInfoForm}
 								userKey={item}
 							/>

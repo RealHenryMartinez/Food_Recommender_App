@@ -19,6 +19,7 @@ export default function AuthRoutes() {
 					
 					<Stack.Screen name="Login" component={LogInPage} />
 					<Stack.Screen name="Register" component={SignUpPage} />
+					
 				</Stack.Navigator>
 			</NavigationContainer>
 		</>

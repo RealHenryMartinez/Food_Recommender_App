@@ -4,8 +4,11 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 // Icon list for the menu bar in the navigation container
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import HomePage from "../pages/HomePage";
 import useRestaurants from "../hooks/useRestaurants";
+import ProfilePage from "../pages/ProfilePage";
+import ChoosePhoto from "../pages/ChoosePhoto";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -26,13 +29,18 @@ const SignedInRoutes = () => {
 						>
 							{/* Home -> main tab / default where it contains only orders and home  */}
 							<Stack.Screen name="HomePage" component={Home} />
+							<Stack.Screen
+								name="Profile"
+								component={ProfilePage}
+							/>
+							<Stack.Screen name="ChooseProfile" component={ChoosePhoto} />
 						</Stack.Navigator>
 					</NavigationContainer>
 				</>
 			);
 			break;
 		case false:
-			return null
+			return null;
 			break;
 	}
 };
@@ -40,23 +48,50 @@ const SignedInRoutes = () => {
 function Home() {
 	//Screen names to easily find in the route
 	const homeName = "Home";
+	const profileName = "Profile";
+	const testProfile = "ChooseProfile";
 	// set up bottom bar navigation style settings and icons
 	return (
 		<Tab.Navigator
 			initialRouteName={homeName}
 			screenOptions={({ route }) => ({
 				tabBarIcon: ({ focused, color, size }) => {
-					let iconName: keyof typeof MaterialCommunityIcons.glyphMap;
-					let rn:string = route.name;
-					if (rn === homeName) {
-						iconName = focused ? "home" : "home-outline";
-						return (
-							<MaterialCommunityIcons
-								name={iconName}
-								size={size}
-								color={color}
-							/>
-						);
+					let iconName:
+						| keyof typeof MaterialCommunityIcons.glyphMap
+						| keyof typeof Ionicons.glyphMap;
+					let rn: string = route.name;
+					switch (rn == "home") {
+						case rn !== homeName:
+							iconName = focused ? "home" : "home-outline";
+							return (
+								<MaterialCommunityIcons
+									name={iconName}
+									size={size}
+									color={color}
+								/>
+							);
+						case rn !== profileName:
+							iconName = focused
+								? "person-circle"
+								: "person-circle-outline";
+							return (
+								<Ionicons
+									name={iconName}
+									size={size}
+									color={color}
+								/>
+							);
+						case rn !== testProfile:
+							iconName = focused
+								? "person-circle"
+								: "person-circle-outline";
+							return (
+								<Ionicons
+									name={iconName}
+									size={size}
+									color={color}
+								/>
+							);
 					}
 				},
 				headerShown: false,
@@ -69,6 +104,8 @@ function Home() {
 		>
 			{/* Tabs we want to use  */}
 			<Tab.Screen name={homeName} component={HomePage} />
+			<Tab.Screen name={profileName} component={ProfilePage} />
+			<Tab.Screen name={testProfile} component={ChoosePhoto} />
 		</Tab.Navigator>
 	);
 }
