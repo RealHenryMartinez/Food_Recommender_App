@@ -6,6 +6,7 @@ import {
 } from "../../util/constants";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "../Features/store";
+import { auth } from "../../util/firebaseConfig";
 
 function handleGetAsyncThunk(name: string, ENDPOINT: string) {
 	const getRequest = createAsyncThunk(
@@ -61,7 +62,9 @@ export const useBusinessSlice = createSlice({
 			console.log("Rejected ");
 		});
 		builder.addCase(getRestaurants.fulfilled, (state, { payload }) => {
-			state.totalRestaurants = payload.businesses;
+			if(auth){
+				state.totalRestaurants = payload.businesses;
+			}
 		});
 
 		builder.addCase(getCategories.pending, (state, { payload }) => {

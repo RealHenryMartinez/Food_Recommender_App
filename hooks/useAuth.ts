@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../util/firebaseConfig";
-import { useAppDispatch } from "../store/Features/hook";
+import { useAppDispatch, useAppSelector } from "../store/Features/hook";
 import axios from 'axios'
 import { CREATE_USER_ENDPOINT, USER_URI } from "../util/constants";
 import { ICredentials, IUserState } from "../interfaces/authInterface";
 import {
 	getAllUsers,
 	userFound,
+	userInformationState,
 	userLoggedOut,
 } from "../store/AuthSlices/useAuthSlice";
 
@@ -43,7 +44,8 @@ export default function useAuth() {
 	const [goToPhoto, setGoToPhoto] = useState<boolean>(false);
 
 	const dispatch = useAppDispatch();
-	
+	const userInfo = useAppSelector(userInformationState);
+	const logStatus  = userInfo.loggedIn
 	// // Create the user in our server
 	// // Used to send data via a form data request for the use of the file system in our server
 	const createUser = async (): Promise<void> => {
@@ -119,31 +121,18 @@ export default function useAuth() {
 	};
 	const [user, setUser] = useState<any>(null);
 	useEffect(() => {
-		async function fetchUserAsync() {
-			try {
-				await getLoggedInUserData(); // Send server request to fetch all the users from the database
-				dispatch(userFound()); // Change the page to the logged in user
-
-				const unsubscribe = onAuthStateChanged(auth, (user) => {
-					if (user) {
-						setUser(user);
-						setIsDone(true); // Update the state
-					} else {
-						dispatch(userLoggedOut());
-						setIsDone(true); // Update the state
-					}
-				});
-
-				return () => unsubscribe(); // Call firebase to when the user's state has changed
-			} catch (e) {
-				console.log(e);
-			}
-		}
-
-		if (!isDone) {
-			fetchUserAsync(); // Calls function once and would not call it more than once
-		}
-	}, [isDone]); // Check again after the user decides to log out or log in
+		const unsubscribe = onAuthStateChanged(auth, (user) => {
+		  if (user) {
+			dispatch(userFound()); // Change the page to the logged in user
+			setUser(user);
+		  } else {
+			dispatch(userLoggedOut());
+		  }
+		  setIsDone(true); // Update the state
+		});
+		
+		return () => unsubscribe(); // Call firebase to unsubscribe when the component unmounts
+	  }, []);
 
 	return {
 		goToPhoto,
