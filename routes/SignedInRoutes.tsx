@@ -38,10 +38,8 @@ const SignedInRoutes = () => {
 					</NavigationContainer>
 				</>
 			);
-			break;
 		case false:
 			return null;
-			break;
 	}
 };
 

@@ -61,6 +61,7 @@ export const useAuthSlice = createSlice({
 		},
 	},
 	extraReducers: (builder) => {
+		
 		builder.addCase(getUser.pending, (state, { payload }) => {
 			console.log("pending");
 		});
@@ -76,6 +77,7 @@ export const useAuthSlice = createSlice({
 			state.loggedIn = true;
 		});
 		builder.addCase(getAllUsers.fulfilled, (state, { payload }) => {
+
 			users = payload.filter(
 				(getOneUser) => getOneUser.email === auth.currentUser.email
 			)[0];

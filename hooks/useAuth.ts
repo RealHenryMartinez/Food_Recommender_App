@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import * as ImagePicker from "expo-image-picker";
 import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../util/firebaseConfig";
 import { useAppDispatch } from "../store/Features/hook";
-import axios from "axios";
+import axios from 'axios'
 import { CREATE_USER_ENDPOINT, USER_URI } from "../util/constants";
 import { ICredentials, IUserState } from "../interfaces/authInterface";
 import {
@@ -11,13 +10,13 @@ import {
 	userFound,
 	userLoggedOut,
 } from "../store/AuthSlices/useAuthSlice";
-import useFirebase from "./useFirebase";
-// Interface structure for the properties of the selected image element that can be used
+
 interface ISelectedImage {
 	uri: string;
 	name: string | null | undefined;
 	type: string;
 }
+
 export const isLessThanTheMB = (
 	fileSize: number,
 	smallerThanSizeMB: number
@@ -37,108 +36,76 @@ export default function useAuth() {
 		email: "",
 		password: "",
 	});
-	// The URI of the image would be stored here
-	let [profileImage, setProfileImage] = useState("");
-	const [goToPhoto, setGoToPhoto] = useState<boolean>(false);
-	const [isDone, setIsDone] = useState(false); // runs when the authentication has been initialized whether a user is authenticated or not
 
-	const { createToken } = useFirebase(); // runs when the authentication has been initialized and for the headers of our request
+	const [showProfileImagePicker, setShowProfileImagePicker] = useState(false);
+	
+	const [isDone, setIsDone] = useState(false);
+	const [goToPhoto, setGoToPhoto] = useState<boolean>(false);
 
 	const dispatch = useAppDispatch();
-	const openImageLibrary = async () => {
-		// Ask user for permission to open the gallery on the device
-		const { status } =
-			await ImagePicker.requestMediaLibraryPermissionsAsync();
-
-		if (status !== "granted") {
-			alert("Sorry, we need camera roll permissions to make this work!");
-		}
-
-		if (status === "granted") {
-			const response = await ImagePicker.launchImageLibraryAsync({
-				mediaTypes: ImagePicker.MediaTypeOptions.Images,
-				allowsEditing: true,
-			});
-
-			if (!response.canceled) {
-				setProfileImage(response.assets[0].uri);
-			}
-		}
-	};
-	// Format of the image data
-	let imageObj = {
-		name: `${new Date()}_profile`,
-		uri: profileImage,
-		type: "image/jpg",
-	};
-	const uploadProfileImage = async () => {
-		let formData = new FormData(); // Using form data it allows us to use the file uploading functionality
-		formData.append("profile", JSON.parse(JSON.stringify(imageObj))); // Create a new key and assign it the value of the file and parse it into json
-		const headerAuth = await createToken(); // Allowed the user that is logged in to access the profile upload request
-		try {
-			axios.post(USER_URI + "/uploadProfileImage", formData, headerAuth);
-		} catch (error) {
-			console.log(error.message);
-		}
-	};
+	
 	// // Create the user in our server
 	// // Used to send data via a form data request for the use of the file system in our server
 	const createUser = async (): Promise<void> => {
 		try {
-			axios
-				.post(USER_URI + CREATE_USER_ENDPOINT, {
-					data: userInfoForm,
-					headers: {
-						Accept: "application/json",
-						"Content-Type": "multipart/form-data",
-					},
-				})
-				.then((response) => {
-					console.log(response.request._response);
-				})
-				.catch((error) => {
-					console.log("Missing or Invalid request");
-				});
+			if (auth) {
+				await axios
+					.post(USER_URI + CREATE_USER_ENDPOINT, {
+						data: userInfoForm,
+						headers: {
+							Accept: "application/json",
+							"Content-Type": "multipart/form-data",
+						},
+					})
+					.then((response) => {
+						console.log(response.request._response);
+					})
+					.catch((error) => {
+						console.log("Missing or Invalid request");
+					});
+				signInWithEmailAndPassword(
+					auth,
+					userInfoForm.email,
+					userInfoForm.password
+				)
+					// takes in the credentials from email and password
+					.then((userCredential) => {
+						console.log("Signed In");
+						// set the user as a variable
+						const user = userCredential.user;
+						setGoToPhoto(true);
+						//dispatch(userFound());
+						return user;
+					})
+					.catch((err) => {
+						console.log("not signed in");
+						console.log(err);
+						alert(err.message);
+					});
+			}
+		} catch (err) {
+			alert("Error creating user");
+		}
+	};
+	const signUserIn = () => {
+		if (auth) {
 			signInWithEmailAndPassword(
 				auth,
-				userInfoForm.email,
-				userInfoForm.password
+				userLoginForm.email,
+				userLoginForm.password
 			)
 				// takes in the credentials from email and password
 				.then((userCredential) => {
 					console.log("Signed In");
 					// set the user as a variable
 					const user = userCredential.user;
-					setGoToPhoto(true);
-					//dispatch(userFound());
+					dispatch(userFound());
 					return user;
 				})
 				.catch((err) => {
-					console.log("not signed in");
-					console.log(err);
 					alert(err.message);
 				});
-		} catch (err) {
-			alert("Error creating user");
 		}
-	};
-	const signUserIn = () => {
-		let userAuth: ICredentials = {
-			email: userLoginForm.email,
-			password: userLoginForm.password,
-		};
-		//setUserInfoForm(userAuth)
-		signInWithEmailAndPassword(auth, userAuth.email, userAuth.password)
-			// takes in the credentials from email and password
-			.then((userCredential) => {
-				console.log("Signed In");
-				// set the user as a variable
-				const user = userCredential.user;
-				return user;
-			})
-			.catch((err) => {
-				alert(err.message);
-			});
 	};
 	/**
 	 * Call the redux slice to send a request to grab the authenticated information from the mongodb server
@@ -153,38 +120,36 @@ export default function useAuth() {
 	const [user, setUser] = useState<any>(null);
 	useEffect(() => {
 		async function fetchUserAsync() {
-			// after user is confirmed, grab their data and any other associated data with the user
 			try {
-				await getLoggedInUserData();
+				await getLoggedInUserData(); // Send server request to fetch all the users from the database
 				dispatch(userFound()); // Change the page to the logged in user
+
+				const unsubscribe = onAuthStateChanged(auth, (user) => {
+					if (user) {
+						setUser(user);
+						setIsDone(true); // Update the state
+					} else {
+						dispatch(userLoggedOut());
+						setIsDone(true); // Update the state
+					}
+				});
+
+				return () => unsubscribe(); // Call firebase to when the user's state has changed
 			} catch (e) {
 				console.log(e);
 			}
 		}
-		/**
-		 * checkiing if the user is authenticated in firebase, and if so, then fetch the data of the user from our database
-		 */
-		onAuthStateChanged(auth, async (user) => {
-			if (user) {
-				setUser(user);
-				fetchUserAsync();
-				setIsDone(true);
-			} else {
-				// User is signed out
-				dispatch(userLoggedOut());
-				setIsDone(true);
-			}
-		});
-	}, [user]);
+
+		if (!isDone) {
+			fetchUserAsync(); // Calls function once and would not call it more than once
+		}
+	}, [isDone]); // Check again after the user decides to log out or log in
 
 	return {
 		goToPhoto,
 		isDone,
-		openImageLibrary,
-		profileImage,
 		setUserInfoForm,
 		userInfoForm,
-		uploadProfileImage,
 		createUser,
 		userLoginForm,
 		setUserLoginForm,

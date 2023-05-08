@@ -5,6 +5,7 @@ import { useAppDispatch } from "../store/Features/hook";
 import { auth } from "../util/firebaseConfig";
 
 export default function useFirebase() {
+
     const dispatch = useAppDispatch();
 	const createToken = async () => {
 		let user = auth.currentUser;
