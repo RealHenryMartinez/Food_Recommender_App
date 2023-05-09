@@ -6,15 +6,15 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import HomePage from "../pages/HomePage";
-import useRestaurants from "../hooks/useRestaurants";
 import ProfilePage from "../pages/ProfilePage";
 import ChoosePhoto from "../pages/ChoosePhoto";
+import useAuth from "../hooks/useAuth";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 const SignedInRoutes = () => {
-	const { isDone } = useRestaurants();
+	const { isDone } = useAuth();
 	// logged in users should have access to the routes
 	switch (isDone) {
 		case true:

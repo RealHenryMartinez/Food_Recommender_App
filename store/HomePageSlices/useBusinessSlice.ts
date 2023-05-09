@@ -7,6 +7,7 @@ import {
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "../Features/store";
 import { auth } from "../../util/firebaseConfig";
+import { ICardProps } from "../../interfaces/restaurantInterface";
 
 function handleGetAsyncThunk(name: string, ENDPOINT: string) {
 	const getRequest = createAsyncThunk(
@@ -37,12 +38,8 @@ export const getCategories = handleGetAsyncThunk(
 	GET_CATEGORY_URI
 );
 
-export interface Restaurants {
-  totalRestaurants: Array<object>;
-  categories: Array<object>
-}
 
-const initialState: Restaurants = {
+const initialState: ICardProps = {
 	totalRestaurants: [],
 	categories: [],
 };
@@ -64,6 +61,12 @@ export const useBusinessSlice = createSlice({
 		builder.addCase(getRestaurants.fulfilled, (state, { payload }) => {
 			if(auth){
 				state.totalRestaurants = payload.businesses;
+				// Create categories based on the restaurants gathered from the database
+				state.categories = state.totalRestaurants.map((restaurant) => restaurant.categories).flat().filter(
+					(thing, index, self) =>
+					  index === self.findIndex((t) => JSON.stringify(t) === JSON.stringify(thing))
+				  );
+				//   console.log('categories: ', state.categories);
 			}
 		});
 

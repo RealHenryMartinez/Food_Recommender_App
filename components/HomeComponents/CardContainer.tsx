@@ -3,6 +3,11 @@ import RestaurantCard from "../../cards/HomePageCards/RestaurantCard";
 import styled from "styled-components";
 import useSetBusiness from "../../hooks/useSetBusiness";
 import { ListRenderItemInfo } from "react-native";
+import {
+	ICardProps,
+	ICategory,
+	IRestaurantDetail,
+} from "../../interfaces/restaurantInterface";
 
 const Container = styled.View``;
 const CardList = styled.FlatList`
@@ -17,47 +22,34 @@ const HeaderContainer = styled.View`
 `;
 
 // Setting up the schema structure that is used by the Yelp API service
-interface ICategoryDetails {
-	title: string;
-}
 
-interface IRestaurantDetail {
-	categories: ICategoryDetails;
-	// necessary because the restaurant details are supposed to be available
-	name: string;
-	image_url: string;
-	rating: number;
-};
-
-interface ICardProps {
-	business?: IRestaurantDetail[];
-}
-// Adding Section to Businesses property
-interface ICategory extends ICardProps {
-	section?: string;
-}
-
-export default function CardContainer({ section }: ICategory) {
+export default function CardContainer({ categories }: ICategory) {
 	const { business } = useSetBusiness();
 	// Passing in the array of business properties
-	const filterBusinessBySection = (restaurantItem: ICardProps[]) => {
+	const filterBusinessBySection = (
+		restaurantItem: IRestaurantDetail[] | undefined
+	) => {
 		let filteredBusiness;
-		filteredBusiness = restaurantItem.filter((restaurant) => {
-			for (let i = 0; i < restaurant["categories"].length; i++) {
-				if (restaurant["categories"][i].title === section) {
-					return restaurant["categories"][i].title === section;
+		filteredBusiness = restaurantItem?.filter((restaurant) => {
+			for (
+				let i = 0;
+				i < Object.values(restaurant.categories).length;
+				i++
+			) {
+				if (restaurant.categories[i].title === categories) {
+					return restaurant.categories[i].title === categories;
 				}
 			}
 		});
 		return filteredBusiness;
 	};
 	// Return a new array list of the business items
-	const filter: ICardProps[] = filterBusinessBySection(business);
+	const filter: IRestaurantDetail[] = filterBusinessBySection(business);
 	return (
 		<>
 			<Container>
 				<HeaderContainer>
-					<ContainerHeader>{section}</ContainerHeader>
+					<ContainerHeader>{categories}</ContainerHeader>
 				</HeaderContainer>
 				<CardList
 					data={filter}
@@ -67,7 +59,9 @@ export default function CardContainer({ section }: ICategory) {
 					snapToAlignment={"center"}
 					showsVerticalScrollIndicator={false}
 					showsHorizontalScrollIndicator={false}
-					renderItem={({ item }:ListRenderItemInfo<IRestaurantDetail>) => {
+					renderItem={({
+						item,
+					}: ListRenderItemInfo<IRestaurantDetail>) => {
 						return <RestaurantCard restaurantInfo={item} />;
 					}}
 				/>
