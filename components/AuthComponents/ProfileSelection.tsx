@@ -92,11 +92,11 @@ export default function ProfileSelection() {
 				<UploadButton disabled={goToPhoto} onPress={uploadAndNavigate}>
 					<ButtonText>Upload</ButtonText>
 				</UploadButton>
-				<SkipContainer>
+				{/* <SkipContainer>
 					<SkipButtonText onPress={() => navigateTo("Home")}>
 						Skip
 					</SkipButtonText>
-				</SkipContainer>
+				</SkipContainer> */}
 			</Container>
 		</>
 	);

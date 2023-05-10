@@ -40,7 +40,7 @@ export let userParams: IUserCredentials | string = {
 export const getUser = handleGetAsyncThunk("getUser", userParams);
 export const getAllUsers = handleGetAsyncThunk("getAllUsers", "/");
 
-let users:Array<object> = [];
+let users: Array<object> = [];
 const initialState: IUserState = {
 	firstName: "",
 	lastName: "",
@@ -61,7 +61,6 @@ export const useAuthSlice = createSlice({
 		},
 	},
 	extraReducers: (builder) => {
-		
 		builder.addCase(getUser.pending, (state, { payload }) => {
 			console.log("pending");
 		});
@@ -77,10 +76,15 @@ export const useAuthSlice = createSlice({
 			state.loggedIn = true;
 		});
 		builder.addCase(getAllUsers.fulfilled, (state, { payload }) => {
-
-			users = payload.filter(
+			const userFound = payload.filter(
 				(getOneUser) => getOneUser.email === auth.currentUser.email
 			)[0];
+			state.firstName = userFound.firstName;
+			state.lastName = userFound.lastName;
+			state.profileImage = userFound.profileUri;
+			state.email = userFound.email;
+			state.password = userFound.password;
+			state.loggedIn = true;
 			console.log("current user:", users);
 		});
 	},
