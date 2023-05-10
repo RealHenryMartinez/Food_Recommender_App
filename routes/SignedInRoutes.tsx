@@ -33,7 +33,6 @@ const SignedInRoutes = () => {
 								name="Profile"
 								component={ProfilePage}
 							/>
-							<Stack.Screen name="ChooseProfile" component={ChoosePhoto} />
 						</Stack.Navigator>
 					</NavigationContainer>
 				</>
@@ -47,7 +46,6 @@ function Home() {
 	//Screen names to easily find in the route
 	const homeName = "Home";
 	const profileName = "Profile";
-	const testProfile = "ChooseProfile";
 	// set up bottom bar navigation style settings and icons
 	return (
 		<Tab.Navigator
@@ -79,17 +77,6 @@ function Home() {
 									color={color}
 								/>
 							);
-						case rn !== testProfile:
-							iconName = focused
-								? "person-circle"
-								: "person-circle-outline";
-							return (
-								<Ionicons
-									name={iconName}
-									size={size}
-									color={color}
-								/>
-							);
 					}
 				},
 				headerShown: false,
@@ -103,7 +90,6 @@ function Home() {
 			{/* Tabs we want to use  */}
 			<Tab.Screen name={homeName} component={HomePage} />
 			<Tab.Screen name={profileName} component={ProfilePage} />
-			<Tab.Screen name={testProfile} component={ChoosePhoto} />
 		</Tab.Navigator>
 	);
 }

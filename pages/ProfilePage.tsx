@@ -5,118 +5,113 @@ import { useAppSelector } from "../store/Features/hook";
 import { userInformationState } from "../store/AuthSlices/useAuthSlice";
 import { Modal } from "react-native";
 import ProfileSelection from "../components/AuthComponents/ProfileSelection";
-
-const Container = styled.View`
-	flex: 1;
-	background-color: #fff;
-`;
-
-const Header = styled.View`
-	background-color: #ff4049;
-	height: 45%;
-	justify-content: center;
-	align-items: center;
-`;
-
-const Avatar = styled.Image`
-	width: 100px;
-	height: 100px;
-	border-radius: 50px;
-	margin-top: 15%;
-`;
-
-const Username = styled.Text`
-	color: #fff;
-	font-size: 24px;
-	margin-top: 5%;
-`;
-
-const Content = styled.View`
-	flex: 1;
-	padding: 16px;
-`;
-
-const Label = styled.Text`
-	font-size: 16px;
-	font-weight: bold;
-	margin-top: 16px;
-`;
-
-const Value = styled.Text`
-	font-size: 16px;
-	margin-top: 8px;
-`;
-
-const LogOutContainer = styled.View`
-	padding: 5%;
-	margin-top: 20%;
-	background-color: #fafafa;
-`;
-const LogOutButton = styled.TouchableOpacity`
-	padding: 5%;
-	background-color: #ff4049;
-	border-radius: 15px;
-	margin-right: 50%;
-`;
-const LogOutText = styled.Text`
-	font-size: 15px;
-	color: #fff;
-	font-weight: 600;
-	text-align: center;
-`;
 const PageContainer = styled.View`
 	flex: 1;
+	background-color: #f5f5f5;
+`;
+
+const ProfileContainer = styled.View`
+	padding: 20px;
 	background-color: #fff;
+	flex: 1;
+	padding-top: 25%;
 `;
 
-const ProfileButton = styled.TouchableOpacity`
-	background-color: #ff4049;
-	width: 55%;
-	height: 10%;
-	justify-content: center;
+const HeaderContainer = styled.View`
+	flex-direction: row;
 	align-items: center;
-	border-radius: 5px;
-	margin-left: 5%;
-	padding: 5%;
 `;
 
-const ProfileButtonText = styled.Text`
-	color: white;
+const ProfileImage = styled.Image`
+	width: 60px;
+	height: 60px;
+	border-radius: 30px;
+	margin-right: 10px;
+`;
+
+const UsernameText = styled.Text`
+	font-size: 18px;
 	font-weight: bold;
+`;
+
+const UserInformationContainer = styled.View`
+	margin-top: 20px;
+`;
+
+const UserInformationRow = styled.View`
+	flex-direction: row;
+	align-items: center;
+	margin-bottom: 10px;
+`;
+
+const UserInformationLabel = styled.Text`
 	font-size: 16px;
+	font-weight: bold;
+	margin-right: 10px;
+`;
+
+const UserInformationValue = styled.Text`
+	font-size: 16px;
+	flex: 1;
 `;
 
 const UploadModal = styled.View`
-	background-color: white;
+	background-color: #fff;
 	padding: 20px;
-	border-radius: 8px;
+	margin: 20px;
 	flex: 1;
 `;
 
 const UploadModalTitle = styled.Text`
-	font-size: 20px;
+	font-size: 18px;
 	font-weight: bold;
-	margin-bottom: 10px;
-	margin-top: 15%;
+	margin-bottom: 20px;
+	margin-top: 10%;
+`;
+
+const UploadModalContainer = styled.View`
+	align-items: center;
+	justify-content: center;
+	margin-bottom: 20px;
+	flex: 1;
 `;
 
 const UploadModalButton = styled.TouchableOpacity`
 	background-color: #ff4049;
-	padding: 5%;
-	border-radius: 8px;
-	margin-bottom: 25%;
+	padding: 20px;
+	align-items: center;
+	border-radius: 5px;
+	margin-bottom: 5%;
 `;
 
 const UploadModalButtonText = styled.Text`
-	color: white;
+	font-size: 16px;
 	font-weight: bold;
-	text-align: center;
-`;
-const UploadModalContainer = styled.View`
-	flex: 1;
+	color: #fff;
 `;
 
-// Create profile Page
+const ButtonContainer = styled.View`
+	flex: 1;
+	padding: 32px;
+`;
+
+const LogoutButton = styled.TouchableOpacity`
+	background-color: #fafafa;
+	border-width: 1px;
+	border-color: #ff4049;
+	border-radius: 5px;
+	width: 100%;
+	height: 50px;
+	justify-content: center;
+	align-items: center;
+`;
+
+const LogoutButtonText = styled.Text`
+	color: #ff4049;
+	font-size: 16px;
+	font-weight: bold;
+`;
+
 const ProfilePage = () => {
 	const { handleSignOutUser } = useFirebase();
 	const currentUser = useAppSelector(userInformationState);
@@ -127,51 +122,61 @@ const ProfilePage = () => {
 	};
 
 	const toUpper = <T extends string>(userInfo: T): string => {
-		// We return a string so we can access the string's functions
 		return (
 			userInfo.substring(0, 1).toUpperCase() +
 			userInfo.substring(1, userInfo.length)
 		);
 	};
+
 	const firstName = toUpper<string>(currentUser.firstName);
 	const lastName = toUpper<string>(currentUser.lastName);
+
 	return (
 		<PageContainer>
-			<Container>
-				<Header>
-					<Avatar source={{ uri: currentUser.profileImage }} />
-					<Username>{firstName + " " + lastName}</Username>
-				</Header>
-				<Content>
-					<Label>Email:</Label>
-					<Value>{currentUser.email}</Value>
-				</Content>
-			</Container>
-			<ProfileButton onPress={toggleModal}>
-				<ProfileButtonText>Upload Profile Image</ProfileButtonText>
-			</ProfileButton>
-			<Modal
-				visible={isModalVisible}
-				onRequestClose={toggleModal}
-				animationType="slide"
-			>
-				<UploadModal>
-					<UploadModalTitle>Upload a profile image</UploadModalTitle>
-					{/* Here is where the user would upload their profile to the server */}
-					<UploadModalContainer>
-						<ProfileSelection />
-					</UploadModalContainer>
-
+			<ProfileContainer>
+				<HeaderContainer>
+					<ProfileImage source={{ uri: currentUser.profileImage }} />
+					<UsernameText>{firstName + " " + lastName}</UsernameText>
+				</HeaderContainer>
+				<UserInformationContainer>
+					<UserInformationRow>
+						<UserInformationLabel>Email:</UserInformationLabel>
+						<UserInformationValue>
+							{currentUser.email}
+						</UserInformationValue>
+					</UserInformationRow>
+				</UserInformationContainer>
+				<ButtonContainer>
 					<UploadModalButton onPress={toggleModal}>
-						<UploadModalButtonText>Cancel</UploadModalButtonText>
+						<UploadModalButtonText>
+							Upload Profile Image
+						</UploadModalButtonText>
 					</UploadModalButton>
-				</UploadModal>
-			</Modal>
-			<LogOutContainer>
-				<LogOutButton onPress={handleSignOutUser}>
-					<LogOutText>Log Out</LogOutText>
-				</LogOutButton>
-			</LogOutContainer>
+					<LogoutButton onPress={handleSignOutUser}>
+						<LogoutButtonText>Log Out</LogoutButtonText>
+					</LogoutButton>
+				</ButtonContainer>
+				<Modal
+					visible={isModalVisible}
+					onRequestClose={toggleModal}
+					animationType="slide"
+				>
+					<UploadModal>
+						<UploadModalTitle>
+							Upload a profile image
+						</UploadModalTitle>
+						{/* Here is where the user would upload their profile to the server */}
+						<UploadModalContainer>
+							<ProfileSelection />
+						</UploadModalContainer>
+						<UploadModalButton onPress={toggleModal}>
+							<UploadModalButtonText>
+								Cancel
+							</UploadModalButtonText>
+						</UploadModalButton>
+					</UploadModal>
+				</Modal>
+			</ProfileContainer>
 		</PageContainer>
 	);
 };
