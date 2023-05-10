@@ -1,5 +1,8 @@
 import styled from "styled-components";
+import { useAppSelector } from "../../store/Features/hook";
+import { getTotalRestaurants } from "../../store/HomePageSlices/useBusinessSlice";
 import RemainingCard from "./RemainingCard";
+import React from'react';
 
 const CardContainer = styled.View`
 	flex: 1;
@@ -34,6 +37,7 @@ const NullCardVisual = styled.View`
 `;
 const RemainingRestaurants = (props) => {
 	const { businesses } = props;
+	const getBusinesses = useAppSelector(getTotalRestaurants);
 	const loadingAmount = [1, 2, 3, 4, 5];
 	// switch (businesses) {
 	// 	case !null:
@@ -76,7 +80,7 @@ const RemainingRestaurants = (props) => {
         <>
             <CardContainer>
                 <CardList
-                    data={businesses}
+                    data={getBusinesses}
                     renderItem={({ item }) => {
                         return (
                             <>

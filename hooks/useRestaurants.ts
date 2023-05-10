@@ -9,7 +9,7 @@ export default function useRestaurants() {
     try {
       // getting all the restaurants from the database
      
-      //await dispatch(getRestaurants())
+      await dispatch(getRestaurants())
       //dispatch(getCategories());
       
     } catch (err) {
